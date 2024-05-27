@@ -1,0 +1,135 @@
+{
+  "id": "design-1",
+  "type": "container",
+  "style": {
+    "gap": "16px"
+  },
+  "children": [
+    {
+      "type": "site-nav",
+      "style": {
+        "text-align": "center",
+        "width": "100%",
+        "max-width": "600px",
+        "margin-left": "auto",
+        "margin-right": "auto"
+      },
+      "linkStyle": {
+        "display": "inline-block",
+        "padding": "8px 16px 8px 16px",
+        "border-radius": "8px",
+
+        ":hover": {
+          "background": "rgba(255,255,255,0.4)"
+        }
+      },
+      "links": [
+        { "name": "Home", "href": "/" },
+        { "name": "Our Story", "href": "/our-story" },
+        { "name": "Events", "href": "/events" },
+        { "name": "Photos", "href": "/photos" },
+        { "name": "Wedding Party", "href": "/wedding-party" },
+        { "name": "Travel", "href": "/travel" },
+        { "name": "Things to do", "href": "/things-to-do" },
+        { "name": "Registry", "href": "/registry" },
+        { "name": "Music Requests", "href": "music-requests" },
+        { "name": "Health and Safety", "href": "health-and-safety" }
+      ]
+    },
+    {
+      "type": "hero",
+      "style": {
+        "paddingTop": "80px",
+        "paddingBottom": "80px",
+        "background": "green"
+      },
+      "children": [
+        {
+          "type": "image",
+          "src": "https://media-api.xogrp.com/images/5fafcbec-1e25-4b85-8eb3-ab3c6c1e783e~rt_auto-rs_1024.h?ordering=explicit",
+          "alt": "",
+          "style": {
+            "width": "100%",
+            "max-width": "1200px"
+          }
+        },
+        {
+          "type": "site-nav",
+          "style": {
+            "text-align": "center",
+            "width": "100%",
+            "max-width": "600px",
+            "margin-left": "auto",
+            "margin-right": "auto"
+          },
+          "linkStyle": {
+            "display": "inline-block",
+            "padding": "8px 16px 8px 16px",
+            "border-radius": "8px",
+
+            ":hover": {
+              "background": "rgba(255,255,255,0.4)"
+            }
+          },
+          "links": [
+            { "name": "Home", "href": "/" },
+            { "name": "Our Story", "href": "/our-story" },
+            { "name": "Events", "href": "/events" },
+            { "name": "Photos", "href": "/photos" },
+            { "name": "Wedding Party", "href": "/wedding-party" },
+            { "name": "Travel", "href": "/travel" },
+            { "name": "Things to do", "href": "/things-to-do" },
+            { "name": "Registry", "href": "/registry" },
+            { "name": "Music Requests", "href": "music-requests" },
+            { "name": "Health and Safety", "href": "health-and-safety" }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Emily & Nate",
+          "style": {
+            "textAlign": "center"
+          }
+        },
+
+        {
+          "type": "text",
+          "content": "November 22, 2018 • Sydney, NSW",
+          "style": {
+            "textAlign": "center"
+          }
+        }
+      ]
+    },
+
+    {
+      "type": "container",
+      "style": {
+        "height": "80vh",
+        "display": "flex",
+        "flex-direction": "column",
+        "justify-content": "center",
+        "align-items": "center",
+        "gap": "24px"
+      },
+      "children": [
+        {
+          "type": "text",
+          "content": "Title"
+        },
+        {
+          "type": "text",
+          "content": "Some really long description will go here"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "src": "https://images.ctfassets.net/t808ruriv8kh/1yWWtyUbcgEjAe9AlWh3Gv/f4879781f887d9901db2e0d18a8671c3/school-updates-app.jpg",
+      "alt": "",
+      "style": {
+        "width": "100%"
+      }
+    }
+  ]
+}
