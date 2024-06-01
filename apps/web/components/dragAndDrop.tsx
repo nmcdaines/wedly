@@ -2,10 +2,10 @@
 
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core'
 import { PropsWithChildren } from 'react'
-import { Plus, PlusCircle } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 export function Droppable(props: PropsWithChildren<{ id: string }>) {
-  const { isOver, setNodeRef } = useDroppable({
+  const { setNodeRef } = useDroppable({
     id: props.id,
   })
 
@@ -22,7 +22,7 @@ export function DroppableDivider({ id }: { id: UniqueIdentifier }) {
   return (
     <div ref={setNodeRef} className="py-4 px-2 flex flex-col">
       <hr
-        className={`transition-all rounded-lg border-4 border-blue-600 ${!isOver ? 'opacity-0' : ''}`}
+        className={`rounded-lg border-4 border-blue-600 ${!isOver ? 'opacity-0' : ''}`}
       />
       {isOver && (
         <div className="bg-blue-400 inline-block p-1 rounded-full border border-2 ml-auto mr-auto -translate-y-2/3">
@@ -34,17 +34,12 @@ export function DroppableDivider({ id }: { id: UniqueIdentifier }) {
 }
 
 export function Draggable(props: PropsWithChildren<{ id: string }>) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef } = useDraggable({
     id: props.id,
   })
 
-  const style = {
-    // Outputs `translate3d(x, y, 0)`
-    // transform: CSS.Translate.toString(transform),
-  }
-
   return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <button ref={setNodeRef} {...listeners} {...attributes} aria-describedby="">
       {props.children}
     </button>
   )

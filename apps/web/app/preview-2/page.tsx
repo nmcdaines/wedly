@@ -15,6 +15,7 @@ import {
   DroppableDivider,
 } from '../../components/dragAndDrop'
 import { Text, Image } from 'lucide-react'
+import cn from 'classnames'
 
 type ComponentType = {
   id: string
@@ -28,10 +29,9 @@ const COMPONENTS: ComponentType[] = [
 ]
 
 export default function Page() {
-  const [elements, setElements] = useState<any[]>([])
   const [activeId, setActiveId] = useState<UniqueIdentifier | undefined>()
 
-  const [content, setContent] = useState<any[]>(() => [
+  const [content, setContent] = useState<any[]>([
     {
       id: 'one',
       type: 'text',
@@ -49,39 +49,47 @@ export default function Page() {
   }, [activeId])
 
   return (
-    <div style={{ height: '100vh' }}>
-      {JSON.stringify(elements)}
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className="flex gap-3">
-          {COMPONENTS.map((component) => (
-            <Draggable key={`component-${component.id}`} id={component.id}>
-              <ComponentCard
-                id={component.id}
-                label={component.label}
-                icon={component.icon}
-              />
-            </Draggable>
-          ))}
+    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <div className="h-screen w-screen bg-slate-700 grid grid-cols-12">
+        <div className="col-span-9 p-6">
+          <div className="h-[calc(100vh - 80px)] rounded-lg bg-white/90 text-black shadow-2xl">
+            {content.map((item) => (
+              <div key={`${item.id}`}>
+                <div>{item.content}</div>
+                <DroppableDivider key={`divider-${item.id}`} id={item.id} />
+              </div>
+            ))}
+
+            <DragOverlay dropAnimation={null}>
+              {activeComponent && (
+                <ComponentCard
+                  id={activeComponent.id}
+                  label={activeComponent.label}
+                  icon={activeComponent.icon}
+                  grabbed
+                />
+              )}
+            </DragOverlay>
+          </div>
         </div>
 
-        {content.map((item) => (
-          <>
-            <div key={`instance-${item.id}`}>{item.content}</div>
-            <DroppableDivider key={`divider-${item.id}`} id={item.id} />
-          </>
-        ))}
+        <div className="col-span-3">
+          <div className="flex gap-3">
+            {COMPONENTS.map((component) => (
+              <Draggable key={`component-${component.id}`} id={component.id}>
+                <ComponentCard
+                  id={component.id}
+                  label={component.label}
+                  icon={component.icon}
+                />
+              </Draggable>
+            ))}
+          </div>
+        </div>
 
-        <DragOverlay dropAnimation={null}>
-          {activeComponent && (
-            <ComponentCard
-              id={activeComponent.id}
-              label={activeComponent.label}
-              icon={activeComponent.icon}
-            />
-          )}
-        </DragOverlay>
-      </DndContext>
-    </div>
+        <div className="col-span-12">{JSON.stringify(content)}</div>
+      </div>
+    </DndContext>
   )
 
   function handleDragStart(event: DragStartEvent) {
@@ -93,15 +101,34 @@ export default function Page() {
   function handleDragEnd({ over, active }: DragEndEvent) {
     if (!over) return
 
-    setElements([...elements, { id: nanoid(), el: active.id, over: over.id }])
+    const updatedContent = [...content]
+    updatedContent.splice(
+      content.findIndex((item) => item.id === over.id) + 1,
+      0,
+      {
+        id: nanoid(),
+        type: active.id,
+        content: `EMPTY ${active.id}`,
+      },
+    )
+
+    setContent(updatedContent)
   }
 }
 
-function ComponentCard({ id, label, icon }: ComponentType) {
+function ComponentCard({ id, label, icon, grabbed }: ComponentType) {
   return (
-    <div className="cursor-pointer bg-slate-700 w-16 h-20 rounded-xl flex flex-col items-center justify-center gap-1 shadow-lg">
+    <div
+      className={cn(
+        'bg-slate-800 w-16 h-20 rounded-xl flex flex-col items-center justify-center gap-1 shadow-lg',
+        grabbed ? 'cursor-grabbing' : 'cursor-grab',
+      )}
+    >
       <div className="text-xl font-black">{icon}</div>
       <div className="text-sm">{label}</div>
     </div>
   )
 }
+
+// keyPath denoted by "."
+// 1234.1234.1234.123432.123123345.34543534534.34534543534.345345345.345345345.345435543.5334534
