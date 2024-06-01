@@ -31,7 +31,7 @@ export default function Page() {
   const [elements, setElements] = useState<any[]>([])
   const [activeId, setActiveId] = useState<UniqueIdentifier | undefined>()
 
-  const [content, setContent] = useState<any[]>([
+  const [content, setContent] = useState<any[]>(() => [
     {
       id: 'one',
       type: 'text',
@@ -54,7 +54,7 @@ export default function Page() {
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="flex gap-3">
           {COMPONENTS.map((component) => (
-            <Draggable key={component.id} id={component.id}>
+            <Draggable key={`component-${component.id}`} id={component.id}>
               <ComponentCard
                 id={component.id}
                 label={component.label}
@@ -66,8 +66,8 @@ export default function Page() {
 
         {content.map((item) => (
           <>
-            <div key={item.id}>{item.content}</div>
-            <DroppableDivider key={item.id} id={item.id} />
+            <div key={`instance-${item.id}`}>{item.content}</div>
+            <DroppableDivider key={`divider-${item.id}`} id={item.id} />
           </>
         ))}
 

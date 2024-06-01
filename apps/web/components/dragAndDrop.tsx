@@ -1,6 +1,7 @@
+'use client'
+
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core'
 import { PropsWithChildren } from 'react'
-
 import { Plus, PlusCircle } from 'lucide-react'
 
 export function Droppable(props: PropsWithChildren<{ id: string }>) {
