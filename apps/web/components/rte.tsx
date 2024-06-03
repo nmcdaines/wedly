@@ -12,6 +12,8 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { useStorageContext } from '../context/storageContext'
 import { useEditor } from '../context/editorContext'
 import { Button } from './ui/button'
+import { EditorState } from 'lexical'
+import { UniqueIdentifier } from '@dnd-kit/core'
 
 const theme = {
   // Theme styling goes here
@@ -25,7 +27,13 @@ function onError(error: any) {
   console.error(error)
 }
 
-export function RichTextEditor() {
+export function RichTextEditor({
+  $ref,
+  alwaysShow,
+}: {
+  $ref?: UniqueIdentifier
+  alwaysShow?: boolean
+}) {
   const { selected } = useEditor()
   const { nodes, updateNode } = useStorageContext()
 
@@ -41,7 +49,12 @@ export function RichTextEditor() {
     setText(text)
   }
 
-  if (!selected) {
+  function onStateChange(editorState: EditorState) {
+    console.log(`editorState`, editorState)
+    updateNode($ref || selected, 'editorState', editorState)
+  }
+
+  if (!selected && !alwaysShow) {
     return null
   }
 
@@ -56,11 +69,11 @@ export function RichTextEditor() {
         <HistoryPlugin />
         <AutoFocusPlugin />
 
-        <OnTextChange onChange={onChange} />
+        <OnTextChange onChange={onChange} onStateChange={onStateChange} />
       </LexicalComposer>
       <Button
         onClick={() => {
-          updateNode(selected, 'content', text)
+          updateNode($ref || selected, 'content', text)
         }}
       >
         Save !
@@ -69,12 +82,18 @@ export function RichTextEditor() {
   )
 }
 
-function OnTextChange({ onChange }: { onChange: (text: string) => void }) {
+function OnTextChange({
+  onChange,
+  onStateChange,
+}: {
+  onChange: (text: string) => void
+}) {
   const [editor] = useLexicalComposerContext()
 
   useLayoutEffect(() => {
     editor.registerUpdateListener(() => {
       onChange(editor.getRootElement()?.textContent ?? '')
+      onStateChange(editor.getEditorState().toJSON())
     })
   }, [editor])
 

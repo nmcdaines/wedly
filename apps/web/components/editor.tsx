@@ -4,7 +4,16 @@ import { useEditor } from '../context/editorContext'
 import { Draggable, DroppableDivider } from './dragAndDrop'
 import { UniqueIdentifier } from '../lib/use-storage'
 import cn from 'classnames'
-import { Text, Image, Columns } from 'lucide-react'
+import {
+  Text,
+  Image,
+  Columns,
+  TrashIcon,
+  Heading,
+  Menu,
+  Video,
+  GalleryHorizontalEnd,
+} from 'lucide-react'
 import {
   DndContext,
   DragEndEvent,
@@ -15,7 +24,7 @@ import { useState, useMemo } from 'react'
 import { useStorageContext } from '../context/storageContext'
 import { RichTextEditor } from './rte'
 import { Button } from './ui/button'
-import { TrashIcon } from 'lucide-react'
+import { TextComponent } from './site/blocks/text'
 
 export type ComponentType = {
   id: string
@@ -25,9 +34,17 @@ export type ComponentType = {
 }
 
 export const COMPONENTS: ComponentType[] = [
+  { id: 'navigation', icon: <Menu className="w-6 h-6" />, label: 'Navigation' },
+  { id: 'heading', icon: <Heading className="w-6 h-6" />, label: 'Heading' },
   { id: 'text', icon: <Text className="w-6 h-6" />, label: 'Text' },
   { id: 'image', icon: <Image className="w-6 h-6" />, label: 'Image' },
   { id: 'columns', icon: <Columns className="w-6 h-6" />, label: 'Columns' },
+  { id: 'video', icon: <Video className="w-6 h-6" />, label: 'Video' },
+  {
+    id: 'image-gallery',
+    icon: <GalleryHorizontalEnd className="w-6 h-6" />,
+    label: 'Image Gallery',
+  },
 ]
 
 export function Editor() {
@@ -43,7 +60,11 @@ export function Editor() {
     <div>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="h-screen w-screen bg-slate-700 grid grid-cols-12">
-          <div className="col-span-9 p-6">
+          <div className="col-span-9 p-6 space-y-4">
+            <div className="h-[calc(100vh - 80px)] rounded-lg bg-white/90 text-black shadow-2xl overflow-clip">
+              Heading
+            </div>
+
             <div className="h-[calc(100vh - 80px)] rounded-lg bg-white/90 text-black shadow-2xl overflow-clip">
               <Stage refs={documents} nodes={nodes} />
 
@@ -57,6 +78,10 @@ export function Editor() {
                   />
                 )}
               </DragOverlay>
+            </div>
+
+            <div className="h-[calc(100vh - 80px)] rounded-lg bg-white/90 text-black shadow-2xl overflow-clip">
+              Footer
             </div>
           </div>
 
@@ -91,7 +116,7 @@ export function Editor() {
 export function Tools() {
   return (
     <>
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap">
         {COMPONENTS.map((component) => (
           <Draggable key={`component-${component.id}`} id={component.id}>
             <ComponentCard
@@ -115,11 +140,12 @@ type StageProps = {
 }
 
 export function Stage({ refs, nodes }: StageProps) {
-  const { selected } = useEditor()
+  const { selected, setSelected } = useEditor()
   const { removeNode } = useStorageContext()
 
   return (
     <div>
+      <DroppableDivider key={`divider-top`} id={0} />
       {refs.map(($ref) => {
         const node = nodes.get($ref)
 
@@ -127,11 +153,13 @@ export function Stage({ refs, nodes }: StageProps) {
           return null
         }
 
+        const isSelected = selected === $ref
+
         return (
-          <div key={`${$ref}`} className="relative group hover:bg-gray-50">
+          <div key={`${$ref}`} className="relative group">
             <div
               className={cn(
-                $ref !== selected && 'hidden',
+                !isSelected && 'hidden',
                 'absolute right-0 group-hover:block p-2 transition-all',
               )}
             >
@@ -139,7 +167,15 @@ export function Stage({ refs, nodes }: StageProps) {
                 <TrashIcon className="w-5 h-5" />
               </Button>
             </div>
-            <RenderComponent node={node} nodes={nodes} />
+            <div
+              className={cn(
+                isSelected && 'outline',
+                'cursor-pointer hover:bg-gray-50',
+              )}
+              onClick={() => setSelected($ref)}
+            >
+              <RenderComponent node={node} nodes={nodes} />
+            </div>
             <DroppableDivider key={`divider-${$ref}`} id={$ref} />
           </div>
         )
@@ -154,11 +190,17 @@ type RenderComponentProps = {
 
 function RenderComponent({ node, nodes }: RenderComponentProps) {
   switch (node.type || '') {
+    case 'navigation':
+      return <NavigationComponent node={node} />
+
     // case 'columns':
     //   return <ColumnsComponent node={node} />
 
+    case 'heading':
+      return <HeadingComponent node={node} />
+
     case 'text':
-      return <TextComponent node={node} />
+      return <BasicTextComponent node={node} />
 
     case 'image':
       return <ImageComponent node={node} />
@@ -168,13 +210,32 @@ function RenderComponent({ node, nodes }: RenderComponentProps) {
   }
 }
 
-function TextComponent({ node }: RenderComponentProps) {
+function HeadingComponent({ node }: RenderComponentProps) {
+  return (
+    <div>
+      Heading
+      <TextComponent editorState={node.properties?.editorState} />
+      <RichTextEditor alwaysShow $ref={node.id} />
+    </div>
+  )
+}
+
+function NavigationComponent({ node }: RenderComponentProps) {
+  return (
+    <div>
+      <div>Navigation</div>
+    </div>
+  )
+}
+
+function BasicTextComponent({ node }: RenderComponentProps) {
   const { setSelected } = useEditor()
 
   return (
     <div onClick={() => setSelected(node.id)}>
       <div>Text</div>
       <div>{node?.properties?.content}</div>
+      <TextComponent editorState={node.properties?.editorState} />
     </div>
   )
 }
@@ -206,7 +267,7 @@ export function ComponentCard({ id, label, icon, grabbed }: ComponentType) {
       )}
     >
       <div className="text-xl font-black">{icon}</div>
-      <div className="text-sm">{label}</div>
+      <div className="text-xs">{label}</div>
     </div>
   )
 }
@@ -220,7 +281,7 @@ function Properties() {
   if (!selected) return
 
   return (
-    <div>
+    <div key={`properties-${selected}`}>
       {selected}
       <Button
         className="bg-blue-600 px-4 py-2 rounded-md"
