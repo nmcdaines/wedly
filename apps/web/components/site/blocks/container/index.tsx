@@ -1,8 +1,20 @@
+import {
+  ContainerNodeEditorPropType,
+  ContainerNodeType,
+  ContainerNodeViewerPropType,
+  isEditorContainer,
+} from '../types'
 import { ContainerEditor } from './editor'
 import { ContainerViewer } from './viewer'
 
-function Container({ isAuthoring }) {
-  const Component = isAuthoring ? ContainerEditor : ContainerViewer
+export function Container(
+  props:
+    | ContainerNodeEditorPropType<ContainerNodeType>
+    | ContainerNodeViewerPropType<ContainerNodeType>,
+) {
+  if (isEditorContainer(props)) {
+    return <ContainerEditor {...props} />
+  }
 
-  return <Component />
+  return <ContainerViewer {...props} />
 }

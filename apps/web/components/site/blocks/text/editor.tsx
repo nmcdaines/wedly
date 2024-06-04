@@ -1,3 +1,7 @@
 'use client'
 
-function TextEditor() {}
+import { NodeEditorPropType, TextNodeType } from '../types'
+
+export function TextEditor(props: NodeEditorPropType<TextNodeType>) {
+  return <div></div>
+}
