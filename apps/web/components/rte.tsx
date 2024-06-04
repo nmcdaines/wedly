@@ -52,6 +52,7 @@ export function RichTextEditor({
   function onStateChange(editorState: EditorState) {
     console.log(`editorState`, editorState)
     updateNode($ref || selected, 'editorState', editorState)
+    // updateNode($ref || selected, 'content', text)
   }
 
   if (!selected && !alwaysShow) {
@@ -73,6 +74,7 @@ export function RichTextEditor({
       </LexicalComposer>
       <Button
         onClick={() => {
+          console.log(`$ref`, $ref)
           updateNode($ref || selected, 'content', text)
         }}
       >

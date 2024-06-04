@@ -84,7 +84,13 @@ importers:
       '@emotion/styled':
         specifier: ^11.11.5
         version: 11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
+      '@lexical/headless':
+        specifier: ^0.15.0
+        version: 0.15.0
       '@lexical/html':
+        specifier: ^0.15.0
+        version: 0.15.0
+      '@lexical/markdown':
         specifier: ^0.15.0
         version: 0.15.0
       '@lexical/react':
@@ -498,6 +504,9 @@ packages:
 
   '@lexical/hashtag@0.15.0':
     resolution: {integrity: sha512-EP6KKvS6BY/8Vh1MLQYeOcYaxnvrLsUkvXXr+Fg8N477Us54Ju69pPO563mbWt7/bpnL9Sh0fbk82JtxqPWpSg==}
+
+  '@lexical/headless@0.15.0':
+    resolution: {integrity: sha512-soLjCphUEHw+z2ulV9cOtisTWmGj6k7TU+O/6nzgn7E1FlvskrrykGhYFrXDsXqB1wJRaILHKlHxQSoNzf931A==}
 
   '@lexical/history@0.15.0':
     resolution: {integrity: sha512-r+pzR2k/51AL6l8UfXeVe/GWPIeWY1kEOuKx9nsYB9tmAkTF66tTFz33DJIMWBVtAHWN7Dcdv0/yy6q8R6CAUQ==}
@@ -4063,6 +4072,10 @@ snapshots:
   '@lexical/hashtag@0.15.0':
     dependencies:
       '@lexical/utils': 0.15.0
+      lexical: 0.15.0
+
+  '@lexical/headless@0.15.0':
+    dependencies:
       lexical: 0.15.0
 
   '@lexical/history@0.15.0':
