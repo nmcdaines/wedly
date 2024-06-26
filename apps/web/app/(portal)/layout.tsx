@@ -2,6 +2,7 @@ import { Layout } from '@/components/layout'
 import { headers } from 'next/headers'
 import { Navigation } from '@/components/layout/navigation'
 import { Search } from '@/components/layout/search'
+import { UserButton } from '@/components/layout/user-button'
 
 export default function PortalLayout({
   children,
@@ -17,7 +18,9 @@ export default function PortalLayout({
         <Layout className="flex py-2 px-6 items-center">
           <div className="mr-auto">Wedly</div>
           <Search />
-          <div className="ml-auto">User</div>
+          <div className="ml-auto">
+            <UserButton />
+          </div>
         </Layout>
       </div>
 
