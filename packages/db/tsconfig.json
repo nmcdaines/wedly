@@ -1,0 +1,14 @@
+{
+  "extends": "@wedly/typescript-config/base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
+  },
+  "include": [
+    "src",
+    "drizzle.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+}

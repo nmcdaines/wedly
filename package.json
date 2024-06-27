@@ -6,7 +6,9 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:push": "pnpm -F db push",
+    "db:studio": "pnpm -F db studio"
   },
   "devDependencies": {
     "@wedly/eslint-config": "workspace:*",
